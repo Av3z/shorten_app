@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 class HomeController extends ChangeNotifier {
   TextEditingController urlEC = TextEditingController();
+  TextEditingController notes = TextEditingController();
 
   ValueNotifier<String> selectedMedium = ValueNotifier('fmkt');
   ValueNotifier<String> selectedUtmSource = ValueNotifier('default');
