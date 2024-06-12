@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shorten_app/src/controllers/home_controller.dart';
 import 'package:shorten_app/src/services/create_url.dart';
 import 'package:shorten_app/src/widgets/dropdown_widget.dart';
+import 'package:shorten_app/src/widgets/selectable_text_field.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -92,17 +92,8 @@ class _HomePageState extends State<HomePage> {
         ],),
 
 
-        SizedBox(
-          child: TextField(
-              controller: urlController.notes,
-              keyboardType: TextInputType.multiline,
-              maxLines: null, // Permite múltiplas linhas
-              expands: false,  // Expande para preencher o espaço disponível
-              decoration: const InputDecoration(
-                hintText: 'Digite seu texto aqui...',
-                border: OutlineInputBorder(),
-              ),
-            ),
+        const SizedBox(
+          child: SelectableTextField()
         ),
 
       ],),
