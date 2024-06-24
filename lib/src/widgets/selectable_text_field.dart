@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class SelectableTextField extends StatefulWidget {
-
   const SelectableTextField({super.key});
 
   @override
@@ -29,7 +28,8 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
     }
 
     setState(() {
-      _controller.selection = TextSelection(baseOffset: start, extentOffset: end);
+      _controller.selection =
+          TextSelection(baseOffset: start, extentOffset: end);
     });
   }
 
@@ -46,7 +46,7 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
         expands: false,
         decoration: const InputDecoration(
           hintText: 'Digite seu texto aqui...',
-          border: OutlineInputBorder(),
+          border: OutlineInputBorder(borderSide: BorderSide()),
         ),
       ),
     );
