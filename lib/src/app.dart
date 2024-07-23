@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorten_app/src/bloc/darkmode_bloc.dart';
 import 'package:shorten_app/src/pages/home_page.dart';
 
 class App extends StatelessWidget {
@@ -6,9 +8,13 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: HomePage(),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => DarkModeBloc()),
+        ],
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: HomePage(),
+        ));
   }
 }
