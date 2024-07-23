@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:shorten_app/src/services/copy_clipboard.dart';
 
 class HomeController extends ChangeNotifier {
   TextEditingController urlEC = TextEditingController();
@@ -36,8 +36,8 @@ class HomeController extends ChangeNotifier {
     'ch4',
     'ch5',
   ];
-
-  Future<void> copyUrlToClipboard() async {
-    await Clipboard.setData(ClipboardData(text: urlMaked.value));
+  void copyUrlToClipboard() {
+    var copyClipboard = CopyClipboard();
+    copyClipboard.copy(urlMaked.value);
   }
 }
