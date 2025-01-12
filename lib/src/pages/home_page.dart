@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorten_app/src/bloc/darkmode_bloc.dart';
 import 'package:shorten_app/src/controllers/home_controller.dart';
 import 'package:shorten_app/src/services/create_url.dart';
+import 'package:shorten_app/src/services/utm_file/service/utm_file_service.dart';
 import 'package:shorten_app/src/widgets/dropdown_widget.dart';
 import 'package:shorten_app/src/widgets/selectable_text_field.dart';
+import 'package:gap/gap.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,98 +16,117 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late HomeController urlController;
+
+  @override
+  void initState() {
+    super.initState();
+    urlController = HomeController(UTMFileService());
+    loadUTMs();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final HomeController urlController = HomeController();
     final display = MediaQuery.of(context).size;
-    Color swithColor = Colors.white;
+    Color swithColor = Colors.black;
     bool isSwitched = false;
 
     return BlocConsumer<DarkModeBloc, DarkModeState>(
       listener: (context, state) {
         if (state is IsDarkModeState) {
           isSwitched = true;
-          swithColor = Colors.black;
+          swithColor = Colors.white;
         }
 
         if (state is IsLightModeState) {
           isSwitched = false;
-          swithColor = Colors.white;
+          swithColor = Colors.black;
         }
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: isSwitched ? Colors.grey[800] : Colors.white,
+          backgroundColor: isSwitched ? Colors.grey[900] : Colors.white,
           floatingActionButton: Switch(
             value: isSwitched,
             activeThumbImage: const AssetImage("assets/moon.png"),
             inactiveThumbImage: const AssetImage("assets/sun.png"),
-            onChanged: (value) =>
-                context.read<DarkModeBloc>().add(ChangeDarkMode(value)),
+            onChanged: (value) => context.read<DarkModeBloc>().add(ChangeDarkMode(value)),
           ),
           body: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
-                  height: display.height * 0.1,
-                ),
                 Container(
-                  margin: EdgeInsets.only(bottom: display.height * 0.05),
-                  height: display.height * 0.12,
-                  child: Image.asset('assets/logo.png'),
-                ),
-                SizedBox(
-                  width: display.width * 0.45,
+                  width: display.width,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   child: Column(
                     children: [
                       TextField(
                         controller: urlController.urlEC,
+                        style: TextStyle(color: swithColor), // Adjust text color
                         decoration: InputDecoration(
-                            hintText: 'Digite sua url',
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: swithColor),
-                            ),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: swithColor),
-                            )),
+                          hintText: 'Digite a url aqui...',
+                          hintStyle: TextStyle(color: swithColor),
+                          labelStyle: TextStyle(color: swithColor),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide(color: swithColor),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: swithColor),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: swithColor),
+                          ),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          ValueListenableBuilder(
-                              valueListenable:
-                                  urlController.selectedUtmCampaign,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20),
+                        child: Row(
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: urlController.selectedUtmCampaign,
                               builder: (context, campaign, child) {
                                 return dropdownWidget(
-                                    campaign, urlController.utmCampaignOptions,
-                                    (String? newValue) {
-                                  urlController.selectedUtmCampaign.value =
-                                      newValue!;
-                                });
-                              }),
-                          ValueListenableBuilder(
-                            valueListenable: urlController.selectedUtmSource,
-                            builder: (context, source, child) {
-                              return dropdownWidget(
-                                  source, urlController.utmSourceOptions,
+                                  campaign,
+                                  urlController.utmCampaignOptions,
                                   (String? newValue) {
-                                urlController.selectedUtmSource.value =
-                                    newValue!;
-                              });
-                            },
-                          ),
-                          ValueListenableBuilder(
-                            valueListenable: urlController.selectedMedium,
-                            builder: (context, medium, child) {
-                              return dropdownWidget(
-                                  medium, urlController.utmMediumOptions,
+                                    urlController.selectedUtmCampaign.value = newValue!;
+                                  },
+                                  isSwitched,
+                                );
+                              },
+                            ),
+                            const Gap(12),
+                            ValueListenableBuilder(
+                              valueListenable: urlController.selectedUtmSource,
+                              builder: (context, source, child) {
+                                return dropdownWidget(
+                                  source,
+                                  urlController.utmSourceOptions,
                                   (String? newValue) {
-                                urlController.selectedMedium.value = newValue!;
-                              });
-                            },
-                          ),
-                        ],
+                                    urlController.selectedUtmSource.value = newValue!;
+                                  },
+                                  isSwitched,
+                                );
+                              },
+                            ),
+                            const Gap(12),
+                            ValueListenableBuilder(
+                              valueListenable: urlController.selectedMedium,
+                              builder: (context, medium, child) {
+                                return dropdownWidget(
+                                  medium,
+                                  urlController.utmMediumOptions,
+                                  (String? newValue) {
+                                    urlController.selectedMedium.value = newValue!;
+                                  },
+                                  isSwitched,
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -115,24 +136,24 @@ class _HomePageState extends State<HomePage> {
                   width: display.width * 0.25,
                   height: display.height * 0.05,
                   child: ElevatedButton(
-                      onPressed: () async {
-                        urlController.urlMaked.value = CreateUrl(
-                                url: urlController.urlEC.text,
-                                campaign:
-                                    urlController.selectedUtmCampaign.value,
-                                medium: urlController.selectedMedium.value,
-                                source: urlController.selectedUtmSource.value)
-                            .modifyUrl();
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: isSwitched ? Colors.grey[700] : Colors.grey[200],
+                    ),
+                    onPressed: () async {
+                      urlController.urlMaked.value = CreateUrl(
+                        url: urlController.urlEC.text,
+                        campaign: urlController.selectedUtmCampaign.value,
+                        medium: urlController.selectedMedium.value,
+                        source: urlController.selectedUtmSource.value,
+                      ).modifyUrl();
 
-                        urlController.copyUrlToClipboard();
-                      },
-                      child: const Text(
-                        'Encurtar',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18),
-                      )),
+                      urlController.copyUrlToClipboard();
+                    },
+                    child: Text(
+                      'Encurtar',
+                      style: TextStyle(color: swithColor, fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
                 ),
                 Container(
                   alignment: Alignment.center,
@@ -148,24 +169,34 @@ class _HomePageState extends State<HomePage> {
                         },
                       ),
                       IconButton(
-                          onPressed: () async {
-                            urlController.copyUrlToClipboard();
-                          },
-                          icon: Icon(
-                            Icons.copy,
-                            color: swithColor,
-                          ))
+                        onPressed: () async {
+                          urlController.copyUrlToClipboard();
+                        },
+                        icon: Icon(
+                          Icons.copy,
+                          color: swithColor,
+                        ),
+                      )
                     ],
                   ),
                 ),
                 SizedBox(
-                    width: display.width * 0.65,
-                    child: const SelectableTextField()),
+                  width: display.width * 0.85,
+                  height: display.height * 0.2,
+                  child: SelectableTextField(
+                    isDarkMode: isSwitched,
+                  ),
+                ),
               ],
             ),
           ),
         );
       },
     );
+  }
+
+  void loadUTMs() async {
+    await urlController.loadUTMs();
+    setState(() {});
   }
 }
