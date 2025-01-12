@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shorten_app/src/services/copy_clipboard.dart';
+import 'package:shorten_app/src/services/utm_file/service/utm_file_service.dart';
 
 class HomeController extends ChangeNotifier {
   TextEditingController urlEC = TextEditingController();
@@ -11,31 +13,25 @@ class HomeController extends ChangeNotifier {
   ValueNotifier<String> selectedUtmCampaign = ValueNotifier('pr2');
   ValueNotifier<String> urlMaked = ValueNotifier("");
 
-  final List<String> utmMediumOptions = [
-    'fmkt',
-    'fut1179',
-    'fut1178',
-    'fut1164',
-    'fut1006',
-    'fut1003',
-    'wp01',
-  ];
+  final UTMFileService _utmFileService;
 
-  final List<String> utmSourceOptions = [
-    'default',
-    'wp_channels',
-  ];
+  HomeController(this._utmFileService);
 
-  final List<String> utmCampaignOptions = [
-    'pr1',
-    'pr2',
-    'pr3',
-    'ch1',
-    'ch2',
-    'ch3',
-    'ch4',
-    'ch5',
-  ];
+  List<String> utmMediumOptions = [];
+  List<String> utmSourceOptions = [];
+  List<String> utmCampaignOptions = [];
+
+  Future<void> loadUTMs() async {
+    try {
+      utmMediumOptions = await _utmFileService.readUTMs('medium');
+      utmSourceOptions = await _utmFileService.readUTMs('source');
+      utmCampaignOptions = await _utmFileService.readUTMs('campaign');
+      notifyListeners();
+    } catch (e) {
+      log('Erro ao carregar UTMs: $e');
+    }
+  }
+
   void copyUrlToClipboard() {
     var copyClipboard = CopyClipboard();
     copyClipboard.copy(urlMaked.value);
