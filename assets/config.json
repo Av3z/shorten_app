@@ -1,0 +1,21 @@
+{
+    "medium": [
+        "fmkt",
+        "fut1179",
+        "fut1178",
+        "fut1164",
+        "fut1003",
+        "fut1006"
+    ],
+    "source": [
+        "default",
+        "wp_channels"
+    ],
+    "campaign": [
+        "ra",
+        "pr2",
+        "pr3",
+        "ch3",
+        "ch5"
+    ]
+}
