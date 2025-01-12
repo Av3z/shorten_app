@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SelectableTextField extends StatefulWidget {
-  const SelectableTextField({super.key});
+  final bool isDarkMode;
+  const SelectableTextField({required this.isDarkMode, super.key});
 
   @override
   State<SelectableTextField> createState() => _SelectableTextFieldState();
@@ -28,13 +29,13 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
     }
 
     setState(() {
-      _controller.selection =
-          TextSelection(baseOffset: start, extentOffset: end);
+      _controller.selection = TextSelection(baseOffset: start, extentOffset: end);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    Color swithColor = widget.isDarkMode ? Colors.white : Colors.black;
     return GestureDetector(
       onDoubleTap: () {
         _selectWordAtCursor(_controller.selection);
@@ -44,9 +45,20 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
         expands: false,
-        decoration: const InputDecoration(
+        style: TextStyle(color: swithColor), // Adjust text color
+        decoration: InputDecoration(
           hintText: 'Digite seu texto aqui...',
-          border: OutlineInputBorder(borderSide: BorderSide()),
+          hintStyle: TextStyle(color: swithColor),
+          labelStyle: TextStyle(color: swithColor),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: swithColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: swithColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: swithColor),
+          ),
         ),
       ),
     );
