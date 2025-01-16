@@ -14,18 +14,29 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
   void _selectWordAtCursor(TextSelection selection) {
     final text = _controller.text;
     final cursorPosition = selection.baseOffset;
+    if (cursorPosition < 0 || cursorPosition >= text.length) {
+      return;
+    }
+
+    if (_controller.text.isEmpty) {
+      return;
+    }
 
     int start = cursorPosition;
     int end = cursorPosition;
 
-    // Expand selection to the start of the word
-    while (start > 0 && text[start - 1] != ' ') {
+    const delimiters = [' ', '\n'];
+
+    while (start > 0 && !delimiters.contains(text[start - 1])) {
       start--;
     }
 
-    // Expand selection to the end of the word
-    while (end < text.length && text[end] != ' ') {
+    while (end < text.length && !delimiters.contains(text[end])) {
       end++;
+    }
+
+    if (start > 0 && text[start - 1] == '\n') {
+      start = cursorPosition;
     }
 
     setState(() {
@@ -45,7 +56,7 @@ class _SelectableTextFieldState extends State<SelectableTextField> {
         keyboardType: TextInputType.multiline,
         maxLines: null,
         expands: false,
-        style: TextStyle(color: swithColor), // Adjust text color
+        style: TextStyle(color: swithColor),
         decoration: InputDecoration(
           hintText: 'Digite seu texto aqui...',
           hintStyle: TextStyle(color: swithColor),
