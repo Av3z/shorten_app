@@ -182,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 SizedBox(
                   width: display.width * 0.85,
-                  height: display.height * 0.2,
+                  height: display.height * 0.5,
                   child: SelectableTextField(
                     isDarkMode: isSwitched,
                   ),
