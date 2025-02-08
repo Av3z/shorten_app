@@ -156,9 +156,7 @@ class _HomePageState extends State<HomePage> {
 
                       if (mounted) {
                         if (result) {
-                          if (mounted) {
-                            SnackbarHelper.showSuccess('URL encurtada com sucesso!', context);
-                          }
+                          SnackbarHelper.showSuccess('URL encurtada com sucesso!', context);
                           return;
                         }
                         SnackbarHelper.showError('Erro ao encurtar URL', context);
@@ -170,33 +168,29 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      children: [
-                        ValueListenableBuilder(
-                          valueListenable: urlController.urlMaked,
-                          builder: (context, value, child) {
-                            return Text(
-                              value,
-                              style: TextStyle(color: swithColor),
-                            );
-                          },
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: Row(
+                    children: [
+                      ValueListenableBuilder(
+                        valueListenable: urlController.urlMaked,
+                        builder: (context, value, child) {
+                          return Text(
+                            value,
+                            style: TextStyle(color: swithColor),
+                          );
+                        },
+                      ),
+                      IconButton(
+                        onPressed: () async {
+                          urlController.copyUrlToClipboard();
+                        },
+                        icon: Icon(
+                          Icons.copy,
+                          color: swithColor,
                         ),
-                        if (urlController.urlMaked.value.isNotEmpty)
-                          IconButton(
-                            onPressed: () async {
-                              urlController.copyUrlToClipboard();
-                            },
-                            icon: Icon(
-                              Icons.copy,
-                              color: swithColor,
-                            ),
-                          )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
                 Container(
@@ -212,16 +206,15 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      if (urlController.shortenedUrl.value.isNotEmpty)
-                        IconButton(
-                          onPressed: () async {
-                            urlController.copyUrlToClipboard(isShortened: true);
-                          },
-                          icon: Icon(
-                            Icons.copy,
-                            color: swithColor,
-                          ),
-                        )
+                      IconButton(
+                        onPressed: () async {
+                          urlController.copyUrlToClipboard(isShortened: true);
+                        },
+                        icon: Icon(
+                          Icons.copy,
+                          color: swithColor,
+                        ),
+                      )
                     ],
                   ),
                 ),
