@@ -25,12 +25,16 @@ class HomeController extends ChangeNotifier {
   List<String> utmMediumOptions = [];
   List<String> utmSourceOptions = [];
   List<String> utmCampaignOptions = [];
+  List<String> utmAccessToken = [];
+  List<String> utmBaseUrl = [];
 
   Future<void> loadUTMs() async {
     try {
       utmMediumOptions = await _utmFileService.readUTMs('medium');
       utmSourceOptions = await _utmFileService.readUTMs('source');
       utmCampaignOptions = await _utmFileService.readUTMs('campaign');
+      utmAccessToken = await _utmFileService.readUTMs('access_token');
+      utmBaseUrl = await _utmFileService.readUTMs('base_url');
       notifyListeners();
     } catch (e) {
       log('Erro ao carregar UTMs: $e');
@@ -51,9 +55,9 @@ class HomeController extends ChangeNotifier {
   FutureOr<bool> shortenUrl() async {
     return _shortenManager
         .shorten(
-      "https://api-ssl.bitly.com/v4/shorten",
+      utmBaseUrl.first,
       headers: {
-        'Authorization': 'Bearer 4336303230008b327901e7a1ff9e2a90af388cd2',
+        'Authorization': 'Bearer ${utmAccessToken.first}',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({

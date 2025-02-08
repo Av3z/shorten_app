@@ -21,6 +21,10 @@ class UTMFileService {
         return utmData.source;
       case 'campaign':
         return utmData.campaign;
+      case 'access_token':
+        return [utmData.accessToken];
+      case 'base_url':
+        return [utmData.baseUrl];
       default:
         throw Exception('Tipo de UTM inválido: $type');
     }
