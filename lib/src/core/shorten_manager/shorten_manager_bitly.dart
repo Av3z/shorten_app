@@ -10,12 +10,17 @@ class ShortenManagerBitly extends ShortenManager {
 
   @override
   Future<String> shorten(String url, {Map<String, String>? headers, body}) async {
-    final response = await networkManager.post(url, headers: headers, body: body);
+    try {
+      final response = await networkManager.post(url, headers: headers, body: body);
 
-    if (response.statusCode != 200) {
-      throw Exception('Erro ao encurtar URL');
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Erro ao encurtar URL');
+      }
+
+      final data = jsonDecode(response.body);
+      return data['link'];
+    } catch (e) {
+      rethrow;
     }
-    final data = jsonDecode(response.body);
-    return data['link'];
   }
 }
