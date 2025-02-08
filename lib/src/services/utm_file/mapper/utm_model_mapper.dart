@@ -6,6 +6,8 @@ abstract class UtmModelMapper {
       medium: List<String>.from(map['medium']),
       source: List<String>.from(map['source']),
       campaign: List<String>.from(map['campaign']),
+      accessToken: map['access_token'],
+      baseUrl: map['base_url'],
     );
   }
 
@@ -14,6 +16,8 @@ abstract class UtmModelMapper {
       'medium': model.medium,
       'source': model.source,
       'campaign': model.campaign,
+      'access_token': model.accessToken,
+      'base_url': model.baseUrl,
     };
   }
 }

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorten_app/src/bloc/darkmode_bloc.dart';
 import 'package:shorten_app/src/controllers/home_controller.dart';
+import 'package:shorten_app/src/core/network_manager/network_manager_http.dart';
+import 'package:shorten_app/src/core/shorten_manager/shorten_manager_bitly.dart';
+import 'package:shorten_app/src/design_system/snackbarhelper/snackbar_helper.dart';
 import 'package:shorten_app/src/services/create_url.dart';
 import 'package:shorten_app/src/services/utm_file/service/utm_file_service.dart';
 import 'package:shorten_app/src/widgets/dropdown_widget.dart';
@@ -21,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    urlController = HomeController(UTMFileService());
+    urlController = HomeController(UTMFileService(), ShortenManagerBitly(NetworkManagerHttp()));
     loadUTMs();
   }
 
@@ -147,11 +150,52 @@ class _HomePageState extends State<HomePage> {
                         source: urlController.selectedUtmSource.value,
                       ).modifyUrl();
 
-                      urlController.copyUrlToClipboard();
+                      await Future.delayed(const Duration(milliseconds: 200));
+
+                      final result = await urlController.shortenUrl();
+
+                      if (mounted) {
+                        if (result) {
+                          if (mounted) {
+                            SnackbarHelper.showSuccess('URL encurtada com sucesso!', context);
+                          }
+                          return;
+                        }
+                        SnackbarHelper.showError('Erro ao encurtar URL', context);
+                      }
                     },
                     child: Text(
                       'Encurtar',
                       style: TextStyle(color: swithColor, fontWeight: FontWeight.bold, fontSize: 18),
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Row(
+                      children: [
+                        ValueListenableBuilder(
+                          valueListenable: urlController.urlMaked,
+                          builder: (context, value, child) {
+                            return Text(
+                              value,
+                              style: TextStyle(color: swithColor),
+                            );
+                          },
+                        ),
+                        if (urlController.urlMaked.value.isNotEmpty)
+                          IconButton(
+                            onPressed: () async {
+                              urlController.copyUrlToClipboard();
+                            },
+                            icon: Icon(
+                              Icons.copy,
+                              color: swithColor,
+                            ),
+                          )
+                      ],
                     ),
                   ),
                 ),
@@ -160,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                   child: Row(
                     children: [
                       ValueListenableBuilder(
-                        valueListenable: urlController.urlMaked,
+                        valueListenable: urlController.shortenedUrl,
                         builder: (context, value, child) {
                           return Text(
                             value,
@@ -168,15 +212,16 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                       ),
-                      IconButton(
-                        onPressed: () async {
-                          urlController.copyUrlToClipboard();
-                        },
-                        icon: Icon(
-                          Icons.copy,
-                          color: swithColor,
-                        ),
-                      )
+                      if (urlController.shortenedUrl.value.isNotEmpty)
+                        IconButton(
+                          onPressed: () async {
+                            urlController.copyUrlToClipboard(isShortened: true);
+                          },
+                          icon: Icon(
+                            Icons.copy,
+                            color: swithColor,
+                          ),
+                        )
                     ],
                   ),
                 ),
