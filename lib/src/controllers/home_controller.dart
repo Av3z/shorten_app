@@ -66,7 +66,7 @@ class HomeController extends ChangeNotifier {
     )
         .then((url) {
       shortenedUrl.value = url;
-      copyUrlToClipboard();
+      copyUrlToClipboard(isShortened: true);
       return true;
     }).catchError((error) {
       log("Erro ao encurtar URL: $error");
