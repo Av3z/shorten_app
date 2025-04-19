@@ -4,6 +4,7 @@ class UtmModel {
   final List<String> campaign;
   final String accessToken;
   final String baseUrl;
+  final String domain;
 
   UtmModel({
     required this.medium,
@@ -11,6 +12,7 @@ class UtmModel {
     required this.campaign,
     required this.accessToken,
     this.baseUrl = '',
+    this.domain = '',
   });
 
   UtmModel copyWith({
@@ -19,6 +21,7 @@ class UtmModel {
     List<String>? campaign,
     String? accessToken,
     String? baseUrl,
+    String? domain,
   }) {
     return UtmModel(
       medium: medium ?? this.medium,
@@ -26,6 +29,7 @@ class UtmModel {
       campaign: campaign ?? this.campaign,
       accessToken: accessToken ?? this.accessToken,
       baseUrl: baseUrl ?? this.baseUrl,
+      domain: domain ?? this.domain,
     );
   }
 }
