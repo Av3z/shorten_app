@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorten_app/src/bloc/darkmode_bloc.dart';
 import 'package:shorten_app/src/controllers/home_controller.dart';
 import 'package:shorten_app/src/core/network_manager/network_manager_http.dart';
-import 'package:shorten_app/src/core/shorten_manager/shorten_manager_bitly.dart';
+import 'package:shorten_app/src/core/shorten_manager/shorten_manager_tly.dart';
 import 'package:shorten_app/src/design_system/snackbarhelper/snackbar_helper.dart';
 import 'package:shorten_app/src/services/create_url.dart';
 import 'package:shorten_app/src/services/utm_file/service/utm_file_service.dart';
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    urlController = HomeController(UTMFileService(), ShortenManagerBitly(NetworkManagerHttp()));
+    urlController = HomeController(UTMFileService(), ShortenManagerTly(NetworkManagerHttp()));
     loadUTMs();
   }
 

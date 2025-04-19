@@ -27,6 +27,7 @@ class HomeController extends ChangeNotifier {
   List<String> utmCampaignOptions = [];
   List<String> utmAccessToken = [];
   List<String> utmBaseUrl = [];
+  List<String> utmDomain = [];
 
   Future<void> loadUTMs() async {
     try {
@@ -35,6 +36,7 @@ class HomeController extends ChangeNotifier {
       utmCampaignOptions = await _utmFileService.readUTMs('campaign');
       utmAccessToken = await _utmFileService.readUTMs('access_token');
       utmBaseUrl = await _utmFileService.readUTMs('base_url');
+      utmDomain = await _utmFileService.readUTMs('domain');
       notifyListeners();
     } catch (e) {
       log('Erro ao carregar UTMs: $e');
@@ -53,16 +55,28 @@ class HomeController extends ChangeNotifier {
   }
 
   FutureOr<bool> shortenUrl() async {
+    var body = {};
+
+    if (utmDomain.isEmpty) {
+      body = {
+        'long_url': urlMaked.value.toString(),
+      };
+    } else {
+      body = {
+        'long_url': urlMaked.value.toString(),
+        "domain": utmDomain.first,
+      };
+    }
+
     return _shortenManager
         .shorten(
       utmBaseUrl.first,
       headers: {
         'Authorization': 'Bearer ${utmAccessToken.first}',
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
       },
-      body: jsonEncode({
-        'long_url': urlMaked.value.toString(),
-      }),
+      body: jsonEncode(body),
     )
         .then((url) {
       shortenedUrl.value = url;
