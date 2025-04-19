@@ -19,5 +19,6 @@
         "ch5"
     ],
     "access_token": "",
-    "base_url": "https://api-ssl.bitly.com/v4/shorten"
+    "base_url": "https://api.t.ly/api/v1/link/shorten",
+    "domain": "https://ibit.ly/"
 }
