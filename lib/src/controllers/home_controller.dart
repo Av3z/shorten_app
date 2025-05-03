@@ -59,11 +59,11 @@ class HomeController extends ChangeNotifier {
 
     if (utmDomain.isEmpty) {
       body = {
-        'long_url': urlMaked.value.toString(),
+        'originalURL': urlMaked.value.toString(),
       };
     } else {
       body = {
-        'long_url': urlMaked.value.toString(),
+        'originalURL': urlMaked.value.toString(),
         "domain": utmDomain.first,
       };
     }
@@ -72,7 +72,7 @@ class HomeController extends ChangeNotifier {
         .shorten(
       utmBaseUrl.first,
       headers: {
-        'Authorization': 'Bearer ${utmAccessToken.first}',
+        'Authorization': utmAccessToken.first,
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
@@ -84,6 +84,10 @@ class HomeController extends ChangeNotifier {
       return true;
     }).catchError((error) {
       log("Erro ao encurtar URL: $error");
+      if (error.response != null) {
+        log("Status Code: ${error.response?.statusCode}");
+        log("Response Body: ${error.response?.data}");
+      }
       return false;
     });
   }
