@@ -6,9 +6,9 @@ abstract class UtmModelMapper {
       medium: List<String>.from(map['medium']),
       source: List<String>.from(map['source']),
       campaign: List<String>.from(map['campaign']),
+      domains: List<String>.from(map['domains'] ?? []),
       accessToken: map['access_token'],
       baseUrl: map['base_url'],
-      domain: map['domain'],
     );
   }
 
@@ -19,7 +19,7 @@ abstract class UtmModelMapper {
       'campaign': model.campaign,
       'access_token': model.accessToken,
       'base_url': model.baseUrl,
-      'domain': model.domain,
+      'domains': model.domains,
     };
   }
 }

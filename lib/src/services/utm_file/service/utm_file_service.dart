@@ -25,8 +25,8 @@ class UTMFileService {
         return [utmData.accessToken];
       case 'base_url':
         return [utmData.baseUrl];
-      case 'domain':
-        return [utmData.domain];
+      case 'domains':
+        return utmData.domains;
       default:
         throw Exception('Tipo de UTM inválido: $type');
     }

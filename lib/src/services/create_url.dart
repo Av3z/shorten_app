@@ -28,5 +28,4 @@ class CreateUrl {
     Uri modifiedUri = uri.replace(queryParameters: queryParams);
     return modifiedUri.toString();
   }
-
 }

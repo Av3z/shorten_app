@@ -9,7 +9,7 @@ class ShortenManagerShortIo extends ShortenManager {
   ShortenManagerShortIo(this.networkManager);
 
   @override
-  Future<String> shorten(String url, {Map<String, String>? headers, body}) async {
+  Future<Map<String, dynamic>> shorten(String url, {Map<String, String>? headers, body}) async {
     try {
       final response = await networkManager.post(url, headers: headers, body: body);
 
@@ -19,14 +19,21 @@ class ShortenManagerShortIo extends ShortenManager {
       print('Response: ${response.body}');
 
       if (response.statusCode != 200 && response.statusCode != 201) {
-        print('Status Code: ${response.statusCode}');
         throw Exception('Erro ao encurtar URL');
       }
-
-      final data = jsonDecode(response.body);
-      return data['shortURL'];
+      return jsonDecode(response.body) as Map<String, dynamic>;
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<T> updateLink<T>(String url, {Map<String, String>? headers, body}) async {
+    try {
+      final response = await networkManager.post(url, headers: headers, body: body);
+      return jsonDecode(response.body) as T;
+    } catch (e) {
+      throw Exception('Erro ao atualizar link: $e');
     }
   }
 }

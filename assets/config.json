@@ -19,6 +19,12 @@
         "ch5"
     ],
     "access_token": "",
-    "base_url": "https://api.t.ly/api/v1/link/shorten",
-    "domain": "https://ibit.ly/"
+    "base_url": "https://api.short.io/links",
+    "domains": [
+        "antenadosnofutebol.link",
+        "brbolavip.link",
+        "somosfanaticos.link",
+        "torcedores.link",
+        "futebolmania.link"
+    ]
 }
