@@ -128,6 +128,42 @@ class _HomePageState extends State<HomePage> {
                                 );
                               },
                             ),
+                            const Gap(12),
+                            ValueListenableBuilder(
+                              valueListenable: urlController.selectedUtmDomain,
+                              builder: (context, domain, child) {
+                                return dropdownWidget(
+                                  domain,
+                                  urlController.utmDomains,
+                                  (String? newValue) {
+                                    urlController.selectedUtmDomain.value = newValue!;
+                                  },
+                                  isSwitched,
+                                );
+                              },
+                            ),
+                            const Gap(12),
+                            Row(
+                              children: [
+                                Text(
+                                  "Usar sugestão de IA ?",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: swithColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                ValueListenableBuilder(
+                                  valueListenable: urlController.useAI,
+                                  builder: (context, value, child) => Checkbox.adaptive(
+                                    value: value,
+                                    onChanged: (bool? value) {
+                                      urlController.useAI.value = value ?? false;
+                                    },
+                                  ),
+                                ),
+                              ],
+                            )
                           ],
                         ),
                       ),
