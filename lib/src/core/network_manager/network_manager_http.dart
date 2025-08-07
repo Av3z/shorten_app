@@ -10,8 +10,8 @@ class NetworkManagerHttp extends NetworkManager {
 
   @override
   Future<T> get<T>(String url, {Map<String, String>? headers}) {
-    // TODO: implement get
-    throw UnimplementedError();
+    final response = http.get(Uri.parse(url), headers: headers);
+    return response as Future<T>;
   }
 
   @override
