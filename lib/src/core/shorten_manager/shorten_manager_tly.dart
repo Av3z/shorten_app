@@ -8,7 +8,7 @@ class ShortenManagerTly extends ShortenManager {
 
   ShortenManagerTly(this.networkManager);
   @override
-  Future<String> shorten(String url, {Map<String, String>? headers, body}) async {
+  Future<Map<String, dynamic>> shorten(String url, {Map<String, String>? headers, body}) async {
     try {
       final response = await networkManager.post(url, headers: headers, body: body);
 
@@ -18,9 +18,14 @@ class ShortenManagerTly extends ShortenManager {
 
       final data = jsonDecode(response.body);
 
-      return data['short_url'];
+      return data as Map<String, dynamic>;
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<T> updateLink<T>(String url, {Map<String, String>? headers, body}) {
+    throw UnimplementedError('updateLink method is not implemented');
   }
 }
