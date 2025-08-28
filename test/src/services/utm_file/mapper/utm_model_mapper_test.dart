@@ -13,7 +13,6 @@ void main() {
         "fut1164",
         "fut1003",
         "fut1006"
-	
     ],
     "source": [
         "default",
@@ -25,6 +24,15 @@ void main() {
         "pr3",
         "ch3",
         "ch5"
+    ],
+    "access_token": "",
+    "base_url": "https://api.short.io/links",
+    "domains": [
+        "antenadosnofutebol.link",
+        "brbolavip.link",
+        "somosfanaticos.link",
+        "torcedores.link",
+        "futebolmania.link"
     ]
 }
   ''';
