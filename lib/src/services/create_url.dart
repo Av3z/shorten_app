@@ -10,14 +10,14 @@ class CreateUrl {
     Uri uri = Uri.parse(url);
     Map<String, String> queryParams = Map.from(uri.queryParameters);
 
-    // Modificar utm_campaign
-    if (campaign.isNotEmpty) {
-      queryParams['utm_campaign'] = campaign;
-    }
-
     // Modificar utm_source, se fornecido
     if (source.isNotEmpty && source != "default") {
       queryParams['utm_source'] = source;
+    }
+
+    // Modificar utm_campaign
+    if (campaign.isNotEmpty) {
+      queryParams['utm_campaign'] = campaign;
     }
 
     // Modificar utm_medium, se fornecido
